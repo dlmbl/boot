@@ -7,3 +7,5 @@ mamba activate 00-boot
 # Install additional requirements
 mamba install matplotlib numpy scikit-image jupyter jupyterlab tqdm imgaug
 
+# Return to base environment
+# mamba activate base

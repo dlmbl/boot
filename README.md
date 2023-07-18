@@ -9,7 +9,7 @@ sh setup.sh
 When you are ready to start the exercise, activate the environment and then run `jupyter lab`.
 
 ```bash
-mamba activate 00-boot
+mamba activate base
 jupyter lab
 ```
 
