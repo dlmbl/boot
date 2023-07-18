@@ -2,23 +2,18 @@
 
 ## Setup
 
-Create a `conda` environment for this exercise and activate it:
+Please run the setup script to create the environment (`00-boot`) for this exercise.
 
-```
-conda create -n 00_boot python
-conda activate 00_boot
-```
-
-Install the following packages
-
-```
-pip install matplotlib numpy scikit-image jupyter tqdm imgaug tensorboard torch
+```bash
+sh setup.sh
 ```
 
-Start Jupyter within this environment:
+When you are ready to start the exercise, activate the environment and then run jupyter lab.
 
-```
-jupyter notebook
+```bash
+mamba activate 00-boot
+jupyter lab
 ```
 
-...and continue with the instructions in the notebook.
+
+
