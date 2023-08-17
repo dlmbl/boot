@@ -1,17 +1,8 @@
-# Exercise 0: Python Boot Camp
+### Exercise 0: Python Boot Camp
 
-Please run the setup script (`setup.sh`) to create the environment (`00-boot`) for this exercise.
+Please open the google colab notebook by clicking on this [link](https://colab.research.google.com/drive/13gr6Iusg0BsSnpm923jvYhKMPiUKjzR1?usp=sharing).
 
-```bash
-sh setup.sh
-```
 
-When you are ready to start the exercise, activate the environment and then run `jupyter lab`.
-
-```bash
-mamba activate base
-jupyter lab
-```
 
 
 
