@@ -1,24 +1,8 @@
-# Exercise 0: Python Boot Camp
+### Exercise 0: Python Boot Camp
 
-## Setup
+Please open the google colab notebook by clicking on this [link](https://colab.research.google.com/drive/13gr6Iusg0BsSnpm923jvYhKMPiUKjzR1?usp=sharing).
 
-Create a `conda` environment for this exercise and activate it:
 
-```
-conda create -n 00_boot python
-conda activate 00_boot
-```
 
-Install the following packages
 
-```
-pip install matplotlib numpy scikit-image jupyter tqdm imgaug tensorboard torch
-```
 
-Start Jupyter within this environment:
-
-```
-jupyter notebook
-```
-
-...and continue with the instructions in the notebook.
