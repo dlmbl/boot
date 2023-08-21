@@ -1,8 +1,5 @@
 ### Exercise 0: Python Boot Camp
 
-Please open the google colab notebook by clicking on this [link](https://colab.research.google.com/drive/13gr6Iusg0BsSnpm923jvYhKMPiUKjzR1?usp=sharing).
+Please open the google colab notebook by clicking on this [link](https://colab.research.google.com/github/dlmbl/boot/blob/main/exercise.ipynb).
 
-You would need to be logged in to a google account in order to access this notebook.
-
-
-
+https://colab.research.google.com/github/dlmbl/boot/blob/lead-ta-reorg/exercise.ipynb
