@@ -5,6 +5,16 @@
 # Welcome! 😃👋
 #
 # In this notebook, we will go through some basic image processing in Python, come across standard tasks required while setting up deep learning pipelines, and familiarize ourselves with popular packages such as `glob`, `tifffile`, `tqdm`, `albumenations` and more.
+# We will learn about:
+# - Loading images (This is important as images are the primary input to most deep learning models)
+# - Normalizing images (This is important as it helps in faster convergence of models becuse it helps in reducing the scale of the input data and hence the scale of the gradients)
+# - Cropping images (This is important as it helps in creating smaller images from the original images which is useful for training models in a memory efficient way)
+# - Downsampling images (This is important as it helps in reducing the size of the images which is useful for training models in a memory efficient way)
+# - Flipping images (This is important as it helps in creating new images from the original data which is useful for training models in a memory efficient way)
+# - Batching images (As we train in a SGD manner, batching is important as it helps in training the model in a memory efficient way and smoothens the optimization process)
+# - Convolutions (This is important as it is the primary operation in Convolutional Neural Networks)
+# - Data Augmentation (This is important as it helps in artificially increasing the size of the training data which is useful for training models in a memory efficient way)
+
 #
 # We will be using sample images from the *MoNuSeg* dataset provided by [Kumar et al, 2018](https://ieeexplore.ieee.org/document/8880654). The data was publicly made available [here](https://monuseg.grand-challenge.org/) by the authors of the publication.
 #
@@ -55,7 +65,7 @@ extract_data(
 # ### Task 0.2
 # Can you a bash command to programmatically count the number of images and masks present in the `download/images` directory.
 #
-# *Hint*: Use `!ls -l <path> | wc - l`
+# *Hint*: Use `!ls -l <path> | wc - l` (you can run any bash command in a jupyter notebook by prefixing it with `!`)
 
 # %% tags=["task"]
 ##########################
@@ -67,6 +77,7 @@ extract_data(
 ##########################
 ####### Solution #########
 ##########################
+
 # !ls -l monuseg-2018/download/images | wc -l
 
 # %% [markdown]
@@ -150,16 +161,24 @@ Is <code>img</code> RGB or grayscale ? What about the mask?
 ######## To Do ###########
 ##########################
 
+# %% tags=["solution"]
+##########################
+######## Solution ###########
+##########################
+
+print(img.shape)
+print(mask.shape)
 # %% [markdown] tags=["solution"]
 # ```
 # ##########################
 # ####### Solution #########
 # ##########################
 # ```
-#
-# Mask = greyscale
-#
-# Image = RGB
+# The shape of the np array can tell us if the image is RGB or grayscale.
+# If the shape is (height, width, 3), then the image is RGB.
+# If the shape is (height, width), then the image is grayscale. Therefore:
+# - Mask = greyscale
+# - Image = RGB
 
 # %% [markdown]
 # ### Image data types
@@ -175,7 +194,7 @@ Is <code>img</code> RGB or grayscale ? What about the mask?
 <div class="alert alert-info">
 
 ### Task 1.3
-What is the data type of <code> img</code>? What are the minimum and maximum intensity values?
+What is the data type of <code>img</code> and the <code>mask</code> ? What are the minimum and maximum intensity values?
 
 *Hint*: <a href="https://assets.datacamp.com/blog_assets/Numpy_Python_Cheat_Sheet.pdf">np cheatsheet</a></div>
 """
@@ -190,7 +209,9 @@ What is the data type of <code> img</code>? What are the minimum and maximum int
 ####### Solution #########
 ##########################
 
-img.dtype
+print("data type: ", img.dtype, mask.dtype)
+print("Image min and max: ", img.min(), img.max())
+print("Mask min and max: ", mask.min(), mask.max())
 
 # %% [markdown]
 # ### Reshaping Images
@@ -199,6 +220,7 @@ img.dtype
 # <br> In `PyTorch` images are represented as (`num_channels`, `height`, `width`).
 #
 # But the image which we are working with has the `channel` as the last axis.
+# Therefore, we need to reshape (by swapping) the image to the correct shape.
 
 # %% [markdown]
 """
@@ -217,6 +239,7 @@ Reshape <code>img</code> such that its shape is <code>(num_channels, height, wid
 
 import numpy as np
 
+print(f"Before reshaping, image has shape {img.shape}")
 img_reshaped = ...  ## TODO
 print(f"After reshaping, image has shape {img_reshaped.shape}")
 
@@ -227,6 +250,7 @@ print(f"After reshaping, image has shape {img_reshaped.shape}")
 
 import numpy as np
 
+print(f"Before reshaping, image has shape {img.shape}")
 img_reshaped = np.transpose(img, (2, 0, 1))
 print(f"After reshaping, image has shape {img_reshaped.shape}")
 
@@ -234,6 +258,7 @@ print(f"After reshaping, image has shape {img_reshaped.shape}")
 # ### Normalizing Images
 #
 # It often helps model training, if we provide image inputs to the model which are between [0,1] intensities. <br>
+# This is because the gradients are more stable and the model converges faster. And the model is not biased towards any particular intensity values. <br>
 # One way of normalizing an image is to divide the intensity on each pixel by the maximum allowed intensity for the available data type.
 
 # %% [markdown]
@@ -248,7 +273,6 @@ Obtain an intensity normalized image using the idea above.
 ######## To Do ###########
 ##########################
 
-
 def normalize(img):
     norm_img = ...  # TODO
     return norm_img
@@ -258,7 +282,6 @@ def normalize(img):
 ##########################
 ####### Solution #########
 ##########################
-
 
 def normalize(img):
     norm_img = img / 255
@@ -339,15 +362,12 @@ for mask_filename in mask_filenames:
 # %%
 import matplotlib.pyplot as plt
 
-
 def visualize(im1, im2):
     plt.figure(figsize=(10, 10))
     plt.subplot(121)
     plt.imshow(im1)
-    plt.axis("off")
     plt.subplot(122)
     plt.imshow(im2)
-    plt.axis("off")
     plt.tight_layout()
 
 
@@ -372,6 +392,9 @@ In the first chapter, we learned about:
 <li> reshaping images </li>
 <li> normalizing images </li>
 <li> Using <code>glob</code> to load a set of images
+
+These are important concepts to understand as they form the basis of most image processing pipelines because they are the basic data handling operations.
+
 <hr>
 </div>
 """
@@ -440,14 +463,22 @@ img = imread(img_filenames[idx])
 
 factor = 4
 downsampled_img = img[::factor, ::factor]
+print(f"Original image shape: {img.shape}")
+print(f"Downsampled image shape: {downsampled_img.shape}")
+
+# Let's visualize the original image and the downsampled image side by side
 visualize(img, downsampled_img)
 
 
 # %% [markdown]
-# ### Task
-# Can you see that the image on the right lacks some detail on account of being downsampled.
-#
-# Try other values of the downsampling factors `factor`.
+"""
+<div class="alert alert-info">
+
+### Task 2.2
+Can you see that the image on the right lacks some detail on account of being downsampled.
+
+Try other values of the downsampling factors `factor`.
+"""
 
 # %% tags=["task"]
 ##########################
@@ -479,6 +510,7 @@ visualize(img, downsampled_img)
 # %%
 idx = np.random.randint(len(img_filenames))
 img = imread(img_filenames[idx])
+# Here the image dimensions are (height, width, num_channels), ::-1 means reverse the order of the elements in the array on the height axis
 vflipped_img = img[::-1, :, :]
 visualize(img, vflipped_img)
 
@@ -486,7 +518,7 @@ visualize(img, vflipped_img)
 """
 <div class="alert alert-info">
 
-### Task 2.2
+### Task 2.3
 Create a horizontally flipped image and visualize!
 """
 
@@ -507,7 +539,7 @@ visualize(img, hflipped_img)
 
 idx = np.random.randint(len(img_filenames))
 img = imread(img_filenames[idx])
-hflipped_img = img[:, ::-1, :]
+hflipped_img = img[:, ::-1, :]  
 visualize(img, hflipped_img)
 
 # %% [markdown]
@@ -521,9 +553,13 @@ Fantastic Work! 🙏 Please post on the course chat when you reach this checkpoi
 
 In the second chapter, we learnt about:
 
-<li> cropping images
-<li> downsampling images
-<li> flipping images
+<li> cropping images </li>
+<li> downsampling images </li>
+<li> flipping images </li>
+
+These operations are important as they help in creating new images from the original data.
+These are also ways of basic data augmentation which is useful for training models.
+
 <hr>
 </div>
 """
@@ -599,7 +635,6 @@ print(f"Batch of images has shape {batch.shape}")
 """
 <div class="alert alert-info">
 
-
 ### Task 3.2
 Implement a function that performs a convolution of an image with a filter.
 <br> Assume that your image is square and that your filter is square and has an odd width. You can set arbitrary values in your filter for now.
@@ -620,8 +655,8 @@ def conv2d(img, kernel):
     h, w = img.shape[0], img.shape[1]  # Starting size of image
     d_k = kernel.shape[0]  # Size of kernel
 
-    h_new = ...  # Calculate the new height of the array
-    w_new = ...  # Calculate the new width of the array
+    h_new = h - d_k + 1  # Calculate the new height of the array
+    w_new = w - d_k + 1  # Calculate the new width of the array
     output = np.zeros((h_new, w_new))
 
     # TODO: add your code for filling output with the convolved image
@@ -657,7 +692,25 @@ def conv2d(img, kernel):
 
 identity = np.array([[0, 0, 0], [0, 1, 0], [0, 0, 0]])
 new_im = conv2d(img[..., 0], identity)
-assert np.all(new_im == img[1:-1, 1:-1, 0])
+# Lets print the original image and the convolved image
+print(img[..., 0].shape)
+print(new_im.shape)
+
+#Lets visualize the original image and the convolved image and the filter
+plt.figure(figsize=(10, 10))
+plt.subplot(131)
+plt.imshow(img[..., 0])
+plt.title("Original Image")
+plt.subplot(132)
+plt.imshow(identity)
+plt.title("Kernel")
+plt.subplot(133)
+plt.imshow(new_im)
+plt.title("Convolved Image")
+plt.tight_layout()
+
+# %% [markdown]
+# **Bonus: Try differnt (arbitary?) filters and see how the output changes!**
 
 # %% [markdown]
 """
@@ -670,6 +723,34 @@ We noticed that the output image is smaller than the input image! <br>
 Can you come up with an analytical relationship regarding how much smaller the output image is *vis-à-vis* the input image? <br>
 Can you think of any strategy which ensures that the output image is the same size as the input image?
 """
+# %% tags=["task"]
+##########################
+######## To Do ###########
+##########################
+
+# %% [markdown] tags=["solution"]
+
+# ```
+# ##########################
+# ####### Solution #########
+# ##########################
+# ```
+
+# - Given an input image of size $H \times W$, a filter of size $K_h \times K_w$ , and strides $S_h$ and $S_w$
+# the output size (height $H_{out}$ and width $W_{out}$) can be calculated using the following formulas (Note that $\lfloor.\rfloor$ is the floor operator):
+
+# $$
+# \begin{equation*}
+#     H_{out} = \left\lfloor \frac{H - K_h}{S_h} \right\rfloor + 1
+# \end{equation*}
+# $$
+# $$
+# \newline
+# \begin{equation*}
+#     W_{out} = \left\lfloor \frac{W - K_w}{S_w} \right\rfloor + 1
+# \end{equation*}
+# $$
+# - We can add padding to the input image to ensure that the output image is the same size as the input image.
 
 # %% [markdown]
 # ### Filters
@@ -735,9 +816,9 @@ Wow! 🤟 Post on the course chat when you reach this checkpoint!
 
 In the third chapter, we learnt about:
 
-<li> Batching </li>
-<li> Convolutions </li>
-<li> Filters</li>
+<li> Batching (here we understood the importance of batching in training models) </li>
+<li> Convolutions (The primary operation in Convolutional Neural Networks) </li>
+<li> Filters (The weights that are learned in Convolutional Neural Networks) </li>
 
 <hr>
 """
