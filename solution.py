@@ -150,7 +150,7 @@ Is <code>img</code> RGB or grayscale ? What about the mask?
 ######## To Do ###########
 ##########################
 
-# %% [markdown]
+# %% [markdown] tags=["solution"]
 # ```
 # ##########################
 # ####### Solution #########
@@ -180,7 +180,16 @@ What is the data type of <code> img</code>? What are the minimum and maximum int
 *Hint*: <a href="https://assets.datacamp.com/blog_assets/Numpy_Python_Cheat_Sheet.pdf">np cheatsheet</a></div>
 """
 
-# %%
+# %% tags=["task"]
+##########################
+######## To Do ###########
+##########################
+
+# %% tags=["solution"]
+##########################
+####### Solution #########
+##########################
+
 img.dtype
 
 # %% [markdown]
@@ -700,6 +709,18 @@ visualize(img[..., 0], output_img)
 What feature in this image do you think this filter is detecting?
 """
 
+# %% tags=["task"]
+##########################
+######## To Do ###########
+##########################
+
+# %% tags=["solution"]
+##########################
+####### Solution #########
+##########################
+
+Answer: Edges
+
 # %% [markdown]
 """
 <div class="alert alert-success">
@@ -794,7 +815,7 @@ While augmenting images and segmentation masks, should they be augmented similar
 ######## To Do ###########
 ##########################
 
-# %% [markdown]
+# %% [markdown] tags=["solution"]
 # ```
 # ##########################
 # ####### Solution #########
