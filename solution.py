@@ -745,7 +745,6 @@ Can you think of any strategy which ensures that the output image is the same si
 # \end{equation*}
 # $$
 # $$
-# \newline
 # \begin{equation*}
 #     W_{out} = \left\lfloor \frac{W - K_w}{S_w} \right\rfloor + 1
 # \end{equation*}
@@ -967,7 +966,7 @@ plt.show()
 
 # ### Plotting Histograms
 # - Let's see the histogram of the intensity values
-# - <code>img</img> is an 8-bit image, so the intensity values range from 0 to 255
+# - <code>img</code> is an 8-bit image, so the intensity values range from 0 to 255
 
 # %%
 plt.figure(figsize=(6, 6))
