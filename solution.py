@@ -714,12 +714,15 @@ What feature in this image do you think this filter is detecting?
 ######## To Do ###########
 ##########################
 
-# %% tags=["solution"]
-##########################
-####### Solution #########
-##########################
 
-Answer: Edges
+# %% [markdown] tags=["solution"]
+# ```
+# ##########################
+# ####### Solution #########
+# ##########################
+# ```
+
+# The Sobel filter is detecting the edges in the image.
 
 # %% [markdown]
 """
