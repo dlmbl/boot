@@ -710,7 +710,7 @@ plt.title("Convolved Image")
 plt.tight_layout()
 
 # %% [markdown]
-# **Bonus: Try differnt (arbitary?) filters and see how the output changes!**
+# **Bonus: Try differnt (arbitary?) filters and see how the output changes! (You can find some [here] https://en.wikipedia.org/wiki/Kernel_(image_processing)**
 
 # %% [markdown]
 """
@@ -934,5 +934,103 @@ In the fourth chapter, we learnt about:
 
 <li> Using <code>albumentations</code> for augmenting images </li>
 <li> Putting together multiple augmentations using <code>A.Compose</code></li>
+<hr>
+"""
+
+# %% [markdown]
+# ## Chapter 5: (Absolutely Optional) Advanced Plotting and Visualization
+
+# Python's matplotlib is a powerful library for creating visualizations. 
+# It is also highly customizable and can be used to create complex plots.
+# In deep learning, visualizing the data is important as it helps in understanding the data and the model better.
+# Therefore, it is important to know how to create different types of plots using matplotlib with specific (useful) functions.
+
+# ### Colormap
+# You can choose a specific colormap to visualize your images.
+# Read more about colormaps [here](https://matplotlib.org/stable/tutorials/colors/colormaps.html)
+# %%
+plt.imshow(img[...,0], cmap="magma")  #Note that we are only showing the first channel of the image
+plt.axis("off")
+plt.show()
+
+# %% [markdown]
+
+# ### Colorbar
+# Sometimes, you may want to add a colorbar to your image to show the intensity values.
+# %%
+plt.figure(figsize=(6, 6))
+plt.imshow(img[...,0], cmap="magma")
+plt.colorbar()
+plt.axis("off")
+plt.show()
+# %% [markdown]
+
+# ### Plotting Histograms
+# - Let's see the histogram of the intensity values
+# - <code>img</img> is an 8-bit image, so the intensity values range from 0 to 255
+
+# %%
+plt.figure(figsize=(6, 6))
+# bins indicate how may unique buclets you might want to put your values in and range is the min and max values in the image 
+# Try different values for bins and range to see how the histogram changes
+plt.hist(img[...,0].ravel(), bins=255, range=(0.0, img[...,0].max()))
+plt.xlabel("Intensity Value")
+plt.ylabel("Count")
+plt.show()
+
+# %% [markdown]
+# Often we might need to plot multiple images side by side.
+# Let's plot the crop of the original image from different locations side by side.
+
+# %%
+fig, ax = plt.subplots(2, 2, figsize=(8, 8))
+ax[0, 0].imshow(img[0:512, 0:512, :], cmap="magma")
+ax[0, 1].imshow(img[512:, 512:, :], cmap="magma")
+ax[1, 0].imshow(img[512:, 0:512, :], cmap="magma")
+ax[1, 1].imshow(img[0:512, 512:, :], cmap="magma")
+
+# %% [markdown]
+
+"""
+<div class="alert alert-info">
+
+### Task 5.1
+With all that knowledge, let's plot the 4 crop of the image in a first row and their histograms in a second row.
+"""
+# %% tags=["task"]
+##########################
+######## To Do ###########
+##########################
+
+# %% tags=["solution"]
+##########################
+####### Solution #########
+##########################
+
+#make a list of the 4 images
+images = [img[0:512, 0:512, :], img[512:, 512:, :], img[512:, 0:512, :], img[0:512, 512:, :]]
+fig, ax = plt.subplots(2, 4, figsize=(25, 10))
+for i in range(0, 4):
+    ax[0, i].imshow(images[i], cmap="magma")
+    ax[0, i].set_title("Image " + str(i))
+    ax[1, i].hist(images[i].ravel(), bins=255, range=(0.0, 255.0))
+    ax[1, i].set_xlabel("Intensity Value")
+    ax[1, i].set_ylabel("Count")
+
+# %% [markdown]
+"""
+<div class="alert alert-success">
+
+<hr>
+Hurrah! 😃
+
+## Checkpoint 5
+
+Chapter 5 is a bonus chapter where we learnt about:
+
+<li> Using colormaps to visualize images </li>
+<li> Adding colorbars to images </li>
+<li> Plotting histograms </li>
+<li> Plotting multiple images side by side </li>
 <hr>
 """
