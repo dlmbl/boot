@@ -776,7 +776,20 @@ $$
 Apply the Sobel filter and describe what it does
 """
 
-# %%
+# %% tags=["task"]
+##########################
+######## To Do ###########
+##########################
+
+flter = ...  # TODO
+output_img = conv2d(img[..., 0], flter)
+visualize(img[..., 0], output_img)
+
+# %% tags=["solution"]
+##########################
+####### Solution #########
+##########################
+
 flter = np.array([[1, 2, 1], [0, 0, 0], [-1, -2, -1]])
 output_img = conv2d(img[..., 0], flter)
 visualize(img[..., 0], output_img)
