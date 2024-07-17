@@ -7,6 +7,7 @@ You can open the solutions in colab by clicking [here](https://colab.research.go
 
 ### Overview
 
+```
 In this notebook, we will go through some basic image processing in Python, come across standard tasks required while setting up deep learning pipelines, and familiarize ourselves with popular packages such as `glob`, `tifffile`, `tqdm`, `albumenations` and more.
 
 We will learn about:
@@ -22,3 +23,4 @@ We will learn about:
 ### Dataset
 We will be using sample images from the *MoNuSeg* dataset provided by [Kumar et al, 2018](https://ieeexplore.ieee.org/document/8880654). The data was publicly made available [here](https://monuseg.grand-challenge.org/) by the authors of the publication.
 This dataset shows Hematoxylin and Eosin (H&E) Stained Images showing nuclei in different shapes.
+```
