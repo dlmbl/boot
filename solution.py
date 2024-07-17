@@ -16,7 +16,7 @@
 # - Data Augmentation (This is important as it helps in artificially increasing the size of the training data which is useful for training models in a memory efficient way)
 
 #
-# We will be using sample images from the *MoNuSeg* dataset provided by <a href="https://ieeexplore.ieee.org/document/8880654" target="_blank">Kumar et al, 2018</a>. The data was publicly made available <a href="https://monuseg.grand-challenge.org/" target="_blank">here</a> by the authors of the publication.
+# We will be using sample images from the *MoNuSeg* dataset provided by [Kumar et al, 2018](javascript:window.open('https://ieeexplore.ieee.org/document/8880654', '_blank')). The data was publicly made available <a href="https://monuseg.grand-challenge.org/" target="_blank">here</a> by the authors of the publication.
 #
 # This dataset shows Hematoxylin and Eosin (H&E) Stained Images showing nuclei in different shapes.
 
