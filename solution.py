@@ -30,6 +30,7 @@
 # %%
 from pathlib import Path
 import urllib.request, zipfile
+from tqdm import tqdm
 
 # %% [markdown]
 # Here, below is a helper function to download the data from an external url specified by argument `zip_url` and save it to a local directory specified by argument `project_name`. Let's execute the function (No output expected yet!).
@@ -631,6 +632,10 @@ print(f"Batch of images has shape {batch.shape}")
 #
 # Please read this [section](https://en.wikipedia.org/wiki/Kernel_(image_processing)#Convolution) on convolutions to learn how to implement a your own convolution function!
 
+# Here we will optionally demosntrate TQDM which is a package that provides a progress bar for loops.
+# This is useful when you have a loop that takes a long time to run and you want to know how far along the loop is.
+# Read more about TQDM [here](https://tqdm.github.io/)
+
 # %% [markdown]
 """
 <div class="alert alert-info">
@@ -660,6 +665,8 @@ def conv2d(img, kernel):
     output = np.zeros((h_new, w_new))
 
     # TODO: add your code for filling output with the convolved image
+    for i in tqdm(range(...)):
+        ...
 
     return output
 
@@ -681,11 +688,10 @@ def conv2d(img, kernel):
     w_new = w - d_k + 1
     output = np.zeros((h_new, w_new))
 
-    for i in range(output.shape[0]):
-        for j in range(output.shape[1]):
+    for i in tqdm(range(output.shape[0]), desc="Processing rows"):
+        for j in tqdm(range(output.shape[1]), desc="Processing columns", leave=False):
             output[i, j] = np.sum(img[i : i + d_k, j : j + d_k] * kernel)
     return output
-
 
 # %%
 # Run this cell to check your function
