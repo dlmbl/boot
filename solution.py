@@ -73,7 +73,6 @@ extract_data(
 ######## To Do ###########
 ##########################
 
-
 # %% tags=["solution"]
 ##########################
 ####### Solution #########
@@ -110,7 +109,6 @@ import matplotlib.pyplot as plt
 img = imread("monuseg-2018/download/images/TCGA-2Z-A9J9-01A-01-TS1.tif")
 print(f"Image `img` has type {type(img)}")  # variable type
 plt.imshow(img)
-
 
 # %% [markdown]
 """
@@ -274,6 +272,7 @@ Obtain an intensity normalized image using the idea above.
 ######## To Do ###########
 ##########################
 
+
 def normalize(img):
     norm_img = ...  # TODO
     return norm_img
@@ -283,6 +282,7 @@ def normalize(img):
 ##########################
 ####### Solution #########
 ##########################
+
 
 def normalize(img):
     norm_img = img / 255
@@ -362,6 +362,7 @@ for mask_filename in mask_filenames:
 
 # %%
 import matplotlib.pyplot as plt
+
 
 def visualize(im1, im2):
     plt.figure(figsize=(10, 10))
@@ -470,7 +471,6 @@ print(f"Downsampled image shape: {downsampled_img.shape}")
 # Let's visualize the original image and the downsampled image side by side
 visualize(img, downsampled_img)
 
-
 # %% [markdown]
 """
 <div class="alert alert-info">
@@ -540,7 +540,7 @@ visualize(img, hflipped_img)
 
 idx = np.random.randint(len(img_filenames))
 img = imread(img_filenames[idx])
-hflipped_img = img[:, ::-1, :]  
+hflipped_img = img[:, ::-1, :]
 visualize(img, hflipped_img)
 
 # %% [markdown]
@@ -621,7 +621,6 @@ for index in indices:
 batch = np.asarray(imgs)
 print(f"Batch of images has shape {batch.shape}")
 
-
 # %% [markdown]
 # ### Convolutions
 #
@@ -630,7 +629,7 @@ print(f"Batch of images has shape {batch.shape}")
 # ![](https://upload.wikimedia.org/wikipedia/commons/1/19/2D_Convolution_Animation.gif)
 #
 #
-# Please read this [section](https://en.wikipedia.org/wiki/Kernel_(image_processing)#Convolution) on convolutions to learn how to implement a your own convolution function!
+# Please read this section https://en.wikipedia.org/wiki/Kernel_(image_processing)#Convolution on convolutions to learn how to implement a your own convolution function!
 
 # Here we will optionally demosntrate TQDM which is a package that provides a progress bar for loops.
 # This is useful when you have a loop that takes a long time to run and you want to know how far along the loop is.
@@ -689,9 +688,12 @@ def conv2d(img, kernel):
     output = np.zeros((h_new, w_new))
 
     for i in tqdm(range(output.shape[0]), desc="Processing rows"):
-        for j in tqdm(range(output.shape[1]), desc="Processing columns", leave=False):
-            output[i, j] = np.sum(img[i : i + d_k, j : j + d_k] * kernel)
+        for j in tqdm(range(output.shape[1]),
+                      desc="Processing columns",
+                      leave=False):
+            output[i, j] = np.sum(img[i:i + d_k, j:j + d_k] * kernel)
     return output
+
 
 # %%
 # Run this cell to check your function
@@ -716,7 +718,7 @@ plt.title("Convolved Image")
 plt.tight_layout()
 
 # %% [markdown]
-# **Bonus: Try differnt (arbitary?) filters and see how the output changes! (You can find some [here] https://en.wikipedia.org/wiki/Kernel_(image_processing)**
+# **Bonus: Try differnt (arbitary?) filters and see how the output changes! You can find some here: https://en.wikipedia.org/wiki/Kernel_(image_processing)**
 
 # %% [markdown]
 """
@@ -813,7 +815,6 @@ What feature in this image do you think this filter is detecting?
 ######## To Do ###########
 ##########################
 
-
 # %% [markdown] tags=["solution"]
 # ```
 # ##########################
@@ -876,14 +877,12 @@ visualize(img, img_aug["image"])
 # We can compose multiple augmentations. Run this cell multiple times to see how the output changes!
 
 # %%
-augment = A.Compose(
-    [
-        A.RandomCrop(width=256, height=256),
-        A.HorizontalFlip(p=0.5),
-        A.RandomBrightnessContrast(p=0.2),
-        rotate,
-    ]
-)
+augment = A.Compose([
+    A.RandomCrop(width=256, height=256),
+    A.HorizontalFlip(p=0.5),
+    A.RandomBrightnessContrast(p=0.2),
+    rotate,
+])
 img_aug = augment(image=img)
 visualize(img, img_aug["image"])
 
@@ -945,7 +944,7 @@ In the fourth chapter, we learnt about:
 # %% [markdown]
 # ## Chapter 5: (Absolutely Optional) Advanced Plotting and Visualization
 
-# Python's matplotlib is a powerful library for creating visualizations. 
+# Python's matplotlib is a powerful library for creating visualizations.
 # It is also highly customizable and can be used to create complex plots.
 # In deep learning, visualizing the data is important as it helps in understanding the data and the model better.
 # Therefore, it is important to know how to create different types of plots using matplotlib with specific (useful) functions.
@@ -954,7 +953,8 @@ In the fourth chapter, we learnt about:
 # You can choose a specific colormap to visualize your images.
 # Read more about colormaps [here](https://matplotlib.org/stable/tutorials/colors/colormaps.html)
 # %%
-plt.imshow(img[...,0], cmap="magma")  #Note that we are only showing the first channel of the image
+plt.imshow(img[..., 0], cmap="magma"
+           )  #Note that we are only showing the first channel of the image
 plt.axis("off")
 plt.show()
 
@@ -964,7 +964,7 @@ plt.show()
 # Sometimes, you may want to add a colorbar to your image to show the intensity values.
 # %%
 plt.figure(figsize=(6, 6))
-plt.imshow(img[...,0], cmap="magma")
+plt.imshow(img[..., 0], cmap="magma")
 plt.colorbar()
 plt.axis("off")
 plt.show()
@@ -976,9 +976,9 @@ plt.show()
 
 # %%
 plt.figure(figsize=(6, 6))
-# bins indicate how may unique buclets you might want to put your values in and range is the min and max values in the image 
+# bins indicate how may unique buclets you might want to put your values in and range is the min and max values in the image
 # Try different values for bins and range to see how the histogram changes
-plt.hist(img[...,0].ravel(), bins=255, range=(0.0, img[...,0].max()))
+plt.hist(img[..., 0].ravel(), bins=255, range=(0.0, img[..., 0].max()))
 plt.xlabel("Intensity Value")
 plt.ylabel("Count")
 plt.show()
@@ -995,7 +995,6 @@ ax[1, 0].imshow(img[512:, 0:512, :], cmap="magma")
 ax[1, 1].imshow(img[0:512, 512:, :], cmap="magma")
 
 # %% [markdown]
-
 """
 <div class="alert alert-info">
 
@@ -1013,7 +1012,10 @@ With all that knowledge, let's plot the 4 crop of the image in a first row and t
 ##########################
 
 #make a list of the 4 images
-images = [img[0:512, 0:512, :], img[512:, 512:, :], img[512:, 0:512, :], img[0:512, 512:, :]]
+images = [
+    img[0:512, 0:512, :], img[512:, 512:, :], img[512:, 0:512, :], img[0:512,
+                                                                       512:, :]
+]
 fig, ax = plt.subplots(2, 4, figsize=(25, 10))
 for i in range(0, 4):
     ax[0, i].imshow(images[i], cmap="magma")
