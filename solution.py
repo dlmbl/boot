@@ -4,7 +4,7 @@
 #
 # Welcome! 😃👋
 #
-# In this notebook, we will go through some basic image processing in Python, come across standard tasks required while setting up deep learning pipelines, and familiarize ourselves with popular packages such as `glob`, `tifffile`, `tqdm`, `albumenations` and more.
+# In this notebook, we will go through some basic image processing in Python, come across standard tasks required while setting up deep learning pipelines, and familiarize ourselves with popular packages such as `glob`, `tifffile`, `tqdm` and more.
 # We will learn about:
 # - Loading images (This is important as images are the primary input to most deep learning models)
 # - Normalizing images (This is important as it helps in faster convergence of models becuse it helps in reducing the scale of the input data and hence the scale of the gradients)
@@ -139,6 +139,32 @@ print(f"Mask `mask` has type {type(mask)}")  # variable type
 plt.imshow(mask)
 
 # %% [markdown]
+# ### Funtion description
+# There is a way inb python to get the description of a function. This is useful when you are not sure what the function does or what arguments it takes.
+
+# %% [markdown]
+"""
+<div class="alert alert-info">
+
+### Task 1.2
+Checking the description of the functions.
+There is a way inb python to get the description of a function. This is useful when you are not sure what the function does or what arguments it takes.
+
+Try to get the description of the `imread` function that we used above.
+"""
+
+# %% tags=["task"]
+##########################
+######## To Do ###########
+##########################
+
+# %% tags=["solution"]
+##########################
+####### Solution #########
+##########################
+
+imread?
+# %% [markdown]
 # ### Image channels
 # If the image is a `grayscale` image, then the number of channels is equal to $1$,
 # in which case the array can also be of shape (height, width). <br>
@@ -149,7 +175,7 @@ plt.imshow(mask)
 """
 <div class="alert alert-info">
 
-### Task 1.2
+### Task 1.3
 Is <code>img</code> RGB or grayscale ? What about the mask?
 
 *Hint*: <a href="https://assets.datacamp.com/blog_assets/Numpy_Python_Cheat_Sheet.pdf">np cheatsheet</a>
@@ -192,7 +218,7 @@ print(mask.shape)
 """
 <div class="alert alert-info">
 
-### Task 1.3
+### Task 1.4
 What is the data type of <code>img</code> and the <code>mask</code> ? What are the minimum and maximum intensity values?
 
 *Hint*: <a href="https://assets.datacamp.com/blog_assets/Numpy_Python_Cheat_Sheet.pdf">np cheatsheet</a></div>
@@ -225,7 +251,7 @@ print("Mask min and max: ", mask.min(), mask.max())
 """
 <div class="alert alert-info">
 
-### Task 1.4
+### Task 1.5
 Reshape <code>img</code> such that its shape is <code>(num_channels, height, width)</code>
 
 *Hint*: <a href="https://numpy.org/doc/stable/reference/generated/numpy.transpose.html">np transpose</a>
@@ -264,7 +290,7 @@ print(f"After reshaping, image has shape {img_reshaped.shape}")
 """
 <div class="alert alert-info">
 
-### Task 1.5
+### Task 1.6
 Obtain an intensity normalized image using the idea above.
 """
 # %% tags=["task"]
@@ -293,7 +319,7 @@ def normalize(img):
 """
 <div class="alert alert-info">
 
-### Task 1.6
+### Task 1.7
 What is the data type of the normalized image. Has it changed from before? Why?
 """
 
@@ -332,7 +358,7 @@ for img_filename in img_filenames:
 """
 <div class="alert alert-info">
 
-### Task 1.7
+### Task 1.8
 Load the set of masks, by correctly specifying the value of the variables `mask_dir` and `mask_filenames`
 """
 
@@ -362,7 +388,6 @@ for mask_filename in mask_filenames:
 
 # %%
 import matplotlib.pyplot as plt
-
 
 def visualize(im1, im2):
     plt.figure(figsize=(10, 10))
@@ -698,7 +723,9 @@ def conv2d(img, kernel):
 # %%
 # Run this cell to check your function
 
-identity = np.array([[0, 0, 0], [0, 1, 0], [0, 0, 0]])
+identity = np.array([[0, 0, 0], 
+                     [0, 1, 0], 
+                     [0, 0, 0]])
 new_im = conv2d(img[..., 0], identity)
 # Lets print the original image and the convolved image
 print(img[..., 0].shape)
@@ -797,7 +824,9 @@ visualize(img[..., 0], output_img)
 ####### Solution #########
 ##########################
 
-flter = np.array([[1, 2, 1], [0, 0, 0], [-1, -2, -1]])
+flter = np.array([[1, 2, 1], 
+                  [0, 0, 0], 
+                  [-1, -2, -1]])
 output_img = conv2d(img[..., 0], flter)
 visualize(img[..., 0], output_img)
 
@@ -843,59 +872,53 @@ In the third chapter, we learnt about:
 """
 
 # %% [markdown]
-# ## Chapter 4: (Optional) Data augmentation
+# ## Chapter 4: Data augmentation
 #
-# Having collected your hard earned data you want to make the most of it. In ML/DL, we're often limited by the size of our the training set. How could we artificially inflate our data to provide more input to our model and help it generalize better?
+# Having collected your hard earned data you want to make the most of it. In ML/DL, we're often limited by the size of our the training set. 
+# How could we artificially inflate our data to provide more input to our model and help it generalize better?
 #
-# One trick is to make simple transformations to our data such as rotating it or adding noise - this process is generally called "data augmentation" (DA) and is widely used in ML.
+# One trick is to make simple transformations to our data such as rotating or flipping it - this process is generally called "data augmentation" (DA) and is widely used in ML.
 #
-# `albumentations` is a Python library that provides a very extensive set of image augmentations,
-# and that seamlessly handles complex annotations like segmentation maps, bounding boxes or keypoints. Let us import `albumentations` and its dependency `cv2` in the cell below.
+# Here we will implement some basic data augmentation techniques using numpy. 
 
-# %%
-import albumentations as A
-import cv2
+# **Note:** This is a good opportunity to learn how this augmentations work under the hood. 
+# However in practice, we would use libraries like `torchvision` or `monai` which are optimized for speed and have a wide range of augmentations available.
 
 # %% [markdown]
-# ### Applying one augmentation
-#
-# To use an augmentation, we can instantiate a transformation with a set of hyperparameters.
-# With a rotation, for example, we can specify the range of the rotation angle to be `(-45, 45)` degrees, always applied, and have a constant border around the rotation.
-#
-# In `albumentations`, the channel-axis is always expected to be the last axis and may be skipped for grayscale images. It is
-# also recommended to work with the `uint8` dtype.
-
+# ### Applying one augmentation at a time
+# Lets apply one augmentation to the image at a time.
+# **Note:** With advanced libraries like `torchvision` or `monai`, you can apply multiple augmentations at once.
 # %%
-rotate = A.Rotate(limit=45, always_apply=True, border_mode=cv2.BORDER_CONSTANT)
-idx = np.random.randint(len(img_filenames))
-img = imread(img_filenames[idx])
-img_aug = rotate(image=img)
-visualize(img, img_aug["image"])
+# Flip horizontally
+img_flip_horizontal = img[:, ::-1]
+# Flip vertically
+img_flip_vertical = img[::-1, :]
+# Rotate by 45 degrees
+img_rotate = np.rot90(img, k=1)
 
-# %% [markdown]
-# ### Applying multiple augmentations
-# We can compose multiple augmentations. Run this cell multiple times to see how the output changes!
-
-# %%
-augment = A.Compose([
-    A.RandomCrop(width=256, height=256),
-    A.HorizontalFlip(p=0.5),
-    A.RandomBrightnessContrast(p=0.2),
-    rotate,
-])
-img_aug = augment(image=img)
-visualize(img, img_aug["image"])
-
+#Let's visualize the original image and the augmented image
+plt.figure(figsize=(10, 10))
+plt.subplot(141)
+plt.imshow(img)
+plt.title("Original Image")
+plt.subplot(142)
+plt.imshow(img_flip_horizontal)
+plt.title("Horizontal Flip")
+plt.subplot(143)
+plt.imshow(img_flip_vertical)
+plt.title("Vertical Flip")
+plt.subplot(144)
+plt.imshow(img_rotate)
+plt.title("Rotate by 45 degrees")
+plt.tight_layout()
 # %% [markdown]
 """
 <div class="alert alert-info">
 
 ### Task 4.1
-Familiarize yourself with the different augmentations available through `albumentations`.
+Familiarize yourself with the different augmentations available through `torchvision`.
 
-Refer to the [examples](https://albumentations.ai/docs/examples/),  [tutorial](https://albumentations.ai/docs/getting_started/mask_augmentation/) and the [documentation](https://albumentations.ai/docs/).
-
-Identify and apply augmentations that you think are interesting.
+Refer to the [examples](https://pytorch.org/vision/0.13/transforms.html) and identify and apply augmentations that you think are interesting.
 """
 
 # %% tags=["task"]
@@ -934,15 +957,14 @@ Hurrah! 😃
 
 ## Checkpoint 4
 
-In the fourth chapter, we learnt about:
+In the fourth chapter, we learnt about data augmentation which is an important concept in training models. Data augmentation helps in artificially increasing the size of the training data which is useful for training models in a memory efficient way.
+We implemented some basic data augmentation techniques using numpy.
 
-<li> Using <code>albumentations</code> for augmenting images </li>
-<li> Putting together multiple augmentations using <code>A.Compose</code></li>
 <hr>
 """
 
 # %% [markdown]
-# ## Chapter 5: (Absolutely Optional) Advanced Plotting and Visualization
+# ## Chapter 5: (Optional) Advanced Plotting and Visualization
 
 # Python's matplotlib is a powerful library for creating visualizations.
 # It is also highly customizable and can be used to create complex plots.
@@ -953,8 +975,7 @@ In the fourth chapter, we learnt about:
 # You can choose a specific colormap to visualize your images.
 # Read more about colormaps [here](https://matplotlib.org/stable/tutorials/colors/colormaps.html)
 # %%
-plt.imshow(img[..., 0], cmap="magma"
-           )  #Note that we are only showing the first channel of the image
+plt.imshow(img[..., 0], cmap="magma")  #Note that we are only showing the first channel of the image
 plt.axis("off")
 plt.show()
 
@@ -962,9 +983,12 @@ plt.show()
 
 # ### Colorbar
 # Sometimes, you may want to add a colorbar to your image to show the intensity values.
+#
+# **Note**: The <code>vmin</code> and <code>vmax</code> arguments are used to set the range of the colorbar.
+# In this case, the intensity values range from 0 to 255. But you can set the range to any values you want (based on the intensity values in the image).
 # %%
 plt.figure(figsize=(6, 6))
-plt.imshow(img[..., 0], cmap="magma")
+plt.imshow(img[..., 0], cmap="magma", vmin=0, vmax=255)
 plt.colorbar()
 plt.axis("off")
 plt.show()
@@ -1012,10 +1036,10 @@ With all that knowledge, let's plot the 4 crop of the image in a first row and t
 ##########################
 
 #make a list of the 4 images
-images = [
-    img[0:512, 0:512, :], img[512:, 512:, :], img[512:, 0:512, :], img[0:512,
-                                                                       512:, :]
-]
+images = [img[0:512, 0:512, :], 
+          img[512:, 512:, :], 
+          img[512:, 0:512, :], 
+          img[0:512,512:, :]]
 fig, ax = plt.subplots(2, 4, figsize=(25, 10))
 for i in range(0, 4):
     ax[0, i].imshow(images[i], cmap="magma")
