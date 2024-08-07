@@ -470,7 +470,7 @@ visualize(img, cropped_img)
 <div class="alert alert-info">
 
 ### Task 2.1
-Visualize the bottom left (fourth) quadrant of a random image
+Visualize the bottom left (third) quadrant of a random image
 """
 
 # %% tags=["task"]
@@ -731,6 +731,7 @@ def conv2d(img, kernel):
 ####### Solution #########
 ##########################
 
+from tqdm import tqdm # tqdm is used to show progress bars in loops
 
 def conv2d(img, kernel):
     assert kernel.shape[0] == kernel.shape[1]
@@ -743,7 +744,7 @@ def conv2d(img, kernel):
     w_new = w - d_k + 1
     output = np.zeros((h_new, w_new))
 
-    for i in tqdm(range(output.shape[0]), desc="Processing rows"):
+    for i in tqdm(range(output.shape[0]), desc="Processing rows", leave=True):
         for j in tqdm(range(output.shape[1]),desc="Processing columns",leave=False):
             output[i, j] = np.sum(img[i:i + d_k, j:j + d_k] * kernel)
     return output
