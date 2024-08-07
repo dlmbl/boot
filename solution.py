@@ -28,9 +28,8 @@
 # To do so, we need to import some commonly used dependencies.
 
 # %%
-from pathlib import Path
-import urllib.request, zipfile
-from tqdm import tqdm
+from pathlib import Path # this library is used to handle file paths 
+import urllib.request, zipfile # urllib is used to download files from the internet, zipfile is used to extract zip files
 
 # %% [markdown]
 # Here, below is a helper function to download the data from an external url specified by argument `zip_url` and save it to a local directory specified by argument `project_name`. Let's execute the function (No output expected yet!).
@@ -64,9 +63,9 @@ extract_data(
 
 # %% [markdown]
 # ### Task 0.2
-# Can you a bash command to programmatically count the number of images and masks present in the `download/images` directory.
+# Can you use a bash command to programmatically count the number of images and masks present in the `download/images` directory ?
 #
-# *Hint*: Use `!ls -l <path> | wc - l` (you can run any bash command in a jupyter notebook by prefixing it with `!`)
+# *Hint*: Use `!ls -l <path> | wc - l` (you can run any bash command in a jupyter notebook by prefixing it with `!`) [Read more on this [here](https://linuxstans.com/wp-content/uploads/2023/06/bash-cheat-sheet.png)]
 
 # %% tags=["task"]
 ##########################
@@ -115,7 +114,7 @@ plt.imshow(img)
 <div class="alert alert-info">
 
 ### Task 1.1
-Can you visualize the corresponding `mask` for the image above. <br>
+Can you visualize the corresponding `mask` for the image above? <br>
 (*Hint*: Look for the same name within the `masks` directory.) <br>
 What does the mask show?
 """
@@ -139,8 +138,8 @@ print(f"Mask `mask` has type {type(mask)}")  # variable type
 plt.imshow(mask)
 
 # %% [markdown]
-# ### Funtion description
-# There is a way inb python to get the description of a function. This is useful when you are not sure what the function does or what arguments it takes.
+# ### Function description
+# There is a way in python to get the description of a function. This is useful when you are not sure what the function does or what arguments it takes.
 
 # %% [markdown]
 """
@@ -148,7 +147,7 @@ plt.imshow(mask)
 
 ### Task 1.2
 Checking the description of the functions.
-There is a way inb python to get the description of a function. This is useful when you are not sure what the function does or what arguments it takes.
+There is a way in python to get the description of a function. This is useful when you are not sure what the function does or what arguments it takes.
 
 Try to get the description of the `imread` function that we used above.
 """
@@ -280,10 +279,23 @@ img_reshaped = np.transpose(img, (2, 0, 1))
 print(f"After reshaping, image has shape {img_reshaped.shape}")
 
 # %% [markdown]
+# ### Manipulating dimensions
+# 
+# Manipulating dimensions is a common operation in deep learning. <br>
+# Sometimes, the a neural network expects the input to be in a certain format, and we need to reshape the data accordingly. <br>
+# Lets add a batch dimension (batching will be introduced later) to the image. <br>
+# We can use `np.newaxis` to add a new axis to the image for this case as we are dealing with numpy arrays.
+# Later we will see how to do this in PyTorch using `torch.unsqueeze`.
+
+# %%
+img_with_batch = img_reshaped[np.newaxis, ...] #here we are adding a new axis at the 0th position, which is the batch dimension `...` means all the other dimensions
+print(f"Image with batch has shape {img_with_batch.shape}")
+
+# %% [markdown]
 # ### Normalizing Images
 #
-# It often helps model training, if we provide image inputs to the model which are between [0,1] intensities. <br>
-# This is because the gradients are more stable and the model converges faster. And the model is not biased towards any particular intensity values. <br>
+# Providing image inputs with intensities between [0, 1] often helps when training the model. <br>
+# This is because the gradients are more stable and the model converges faster, and the model is not biased towards any particular intensity values. <br>
 # One way of normalizing an image is to divide the intensity on each pixel by the maximum allowed intensity for the available data type.
 
 # %% [markdown]
@@ -406,6 +418,10 @@ idx = np.random.randint(len(img_filenames))
 visualize(imread(img_filenames[idx]), imread(mask_filenames[idx]))
 
 # %% [markdown]
+# Note that all the labels in the right image have different colors. This is because the mask is a instance mask where each color represents a different class.
+# The colors indicate an unique id for each object in the image.
+
+# %% [markdown]
 """
 <div class="alert alert-success">
 
@@ -430,6 +446,7 @@ These are important concepts to understand as they form the basis of most image 
 
 # %% [markdown]
 # Another approach could be percentile normalization. This maps the min intensity to 0 and max intensity to 0. This is useful if there are
+# outliers in the data. The benefit of this approach is that it is robust to outliers.
 
 # %% [markdown]
 # ## Chapter 2
@@ -438,14 +455,14 @@ These are important concepts to understand as they form the basis of most image 
 # While training models, we usually feed in smaller crops extracted from the original images.
 # To do so, we can rely on the powerful numpy [indexing](https://numpy.org/doc/stable/user/basics.indexing.html).
 #
-# For example, let's extract the top left corner from one of our images.
+# For example, let's extract the top left (second) quadrant from one of our images.
 #
 # In the cell below, the original image is visualized on the left and the cropped image is seen on the right.
 
 # %%
 idx = np.random.randint(len(img_filenames))
 img = imread(img_filenames[idx])
-cropped_img = img[0:512, 0:512, :]
+cropped_img = img[0:500, 0:500, :]
 visualize(img, cropped_img)
 
 # %% [markdown]
@@ -453,7 +470,7 @@ visualize(img, cropped_img)
 <div class="alert alert-info">
 
 ### Task 2.1
-Visualize the bottom left portion of any  image
+Visualize the bottom left (fourth) quadrant of a random image
 """
 
 # %% tags=["task"]
@@ -473,13 +490,17 @@ visualize(img, cropped_img)
 
 idx = np.random.randint(len(img_filenames))
 img = imread(img_filenames[idx])
-cropped_img = img[512:, 0:512, :]
+cropped_img = img[500:, 0:500, :]
 visualize(img, cropped_img)
 
 # %% [markdown]
 # ### Downsampling
 #
-# For large images, sometimes we require that they are downsampled to fit in memory.
+# For large images, sometimes we require that they are downsampled to fit in memory. <br>
+#
+# **Note:** Downsampling is a lossy operation, as we are removing information from the image. If your images contain important information in the removed pixels, this can be detrimental to the model's performance. <br>
+# This is usually not a problem for images with a high resolution, as the removed information is often redundant. <br>
+# However, if subtle structes in the content of your image is important, it is better to crop the image rather than downsample it. <br>
 #
 # Say if one wants to have every fourth pixel from the original image, one specifies `factor` = $4$, and one can run the following cell:
 
@@ -501,9 +522,11 @@ visualize(img, downsampled_img)
 <div class="alert alert-info">
 
 ### Task 2.2
-Can you see that the image on the right lacks some detail on account of being downsampled.
+Can you see that the image on the right lacks some detail on account of being downsampled? <br>
+This might not be readily evident now, but if you look closely, you can see that the image on the right is a bit blurry. <br>
+This is because we are skipping pixels while downsampling.
 
-Try other values of the downsampling factors `factor`.
+To make the effect more evident, try other extreme values of the downsampling `factor`.
 """
 
 # %% tags=["task"]
@@ -656,7 +679,7 @@ print(f"Batch of images has shape {batch.shape}")
 #
 # Please read this section https://en.wikipedia.org/wiki/Kernel_(image_processing)#Convolution on convolutions to learn how to implement a your own convolution function!
 
-# Here we will optionally demosntrate TQDM which is a package that provides a progress bar for loops.
+# Here we will optionally demonstrate TQDM which is a package that provides a progress bar for loops.
 # This is useful when you have a loop that takes a long time to run and you want to know how far along the loop is.
 # Read more about TQDM [here](https://tqdm.github.io/)
 
@@ -667,8 +690,15 @@ print(f"Batch of images has shape {batch.shape}")
 ### Task 3.2
 Implement a function that performs a convolution of an image with a filter.
 <br> Assume that your image is square and that your filter is square and has an odd width. You can set arbitrary values in your filter for now.
-
 <br> Note that your output image will be smaller.
+
+**A few things to note:** <br>
+-- Filter: A filter is a matrix that is convolved with the image. The filter is also known as a kernel. It computes the correlation between the itself and the image. It is kind of finding the similarity between the filter and the image.
+The filter is applied to the image by sliding the filter over the image and computing the dot product between the filter and the image at each location. The output of the convolution is called the feature map (a concept that will come up in future exercises).
+
+-- The filter is usually a square matrix with odd dimensions. This is because the filter is applied to the image by sliding it over the image. If the filter has even dimensions, it will not have a center pixel. This will make it difficult to align the filter with the image. 
+If the filter is not square, we loose the symmetrical applicability of the filter. The filter then will have to be applied in different directions (height, width) separately. This will make the implementation more complex and migt lead to distortions in the output features.
+
 """
 
 # %% tags=["task"]
@@ -676,6 +706,7 @@ Implement a function that performs a convolution of an image with a filter.
 ######## To Do ###########
 ##########################
 
+from tqdm import tqdm # tqdm is used to show progress bars in loops
 
 def conv2d(img, kernel):
     assert kernel.shape[0] == kernel.shape[1]
@@ -713,9 +744,7 @@ def conv2d(img, kernel):
     output = np.zeros((h_new, w_new))
 
     for i in tqdm(range(output.shape[0]), desc="Processing rows"):
-        for j in tqdm(range(output.shape[1]),
-                      desc="Processing columns",
-                      leave=False):
+        for j in tqdm(range(output.shape[1]),desc="Processing columns",leave=False):
             output[i, j] = np.sum(img[i:i + d_k, j:j + d_k] * kernel)
     return output
 
@@ -726,15 +755,16 @@ def conv2d(img, kernel):
 identity = np.array([[0, 0, 0], 
                      [0, 1, 0], 
                      [0, 0, 0]])
-new_im = conv2d(img[..., 0], identity)
+# Let's take a 256x256 center crop of the image for better visualization of the effect of the convolution
+new_im = conv2d(img[128:384, 128:384, 0], identity)
 # Lets print the original image and the convolved image
-print(img[..., 0].shape)
+print(img[128:384, 128:384, 0].shape)
 print(new_im.shape)
 
 #Lets visualize the original image and the convolved image and the filter
 plt.figure(figsize=(10, 10))
 plt.subplot(131)
-plt.imshow(img[..., 0])
+plt.imshow(img[128:384, 128:384, 0])
 plt.title("Original Image")
 plt.subplot(132)
 plt.imshow(identity)
@@ -796,7 +826,7 @@ Can you think of any strategy which ensures that the output image is the same si
 """
 <div class="alert alert-info">
 
-The following is known as the Sobel filter:
+The following is known as the [Sobel filter](https://en.wikipedia.org/wiki/Sobel_operator):
 
 $$
 \begin{bmatrix}
@@ -816,8 +846,8 @@ Apply the Sobel filter and describe what it does
 ##########################
 
 flter = ...  # TODO
-output_img = conv2d(img[..., 0], flter)
-visualize(img[..., 0], output_img)
+output_img = conv2d(img[128:384, 128:384, 0], flter)
+visualize(img[128:384, 128:384, 0], output_img)
 
 # %% tags=["solution"]
 ##########################
@@ -827,8 +857,8 @@ visualize(img[..., 0], output_img)
 flter = np.array([[1, 2, 1], 
                   [0, 0, 0], 
                   [-1, -2, -1]])
-output_img = conv2d(img[..., 0], flter)
-visualize(img[..., 0], output_img)
+output_img = conv2d(img[128:384, 128:384, 0], flter)
+visualize(img[128:384, 128:384, 0], output_img)
 
 # %% [markdown]
 """
@@ -875,7 +905,7 @@ In the third chapter, we learnt about:
 # ## Chapter 4: Data augmentation
 #
 # Having collected your hard earned data you want to make the most of it. In ML/DL, we're often limited by the size of our the training set. 
-# How could we artificially inflate our data to provide more input to our model and help it generalize better?
+# How could we artificially increase our data to provide more input to our model and help it generalize better?
 #
 # One trick is to make simple transformations to our data such as rotating or flipping it - this process is generally called "data augmentation" (DA) and is widely used in ML.
 #
@@ -887,7 +917,7 @@ In the third chapter, we learnt about:
 # %% [markdown]
 # ### Applying one augmentation at a time
 # Lets apply one augmentation to the image at a time.
-# **Note:** With advanced libraries like `torchvision` or `monai`, you can apply multiple augmentations at once.
+# **Note:** With advanced libraries like `torchvision` or `monai`, you can apply multiple augmentations at once. [Read more about [Torchvision](https://pytorch.org/vision/stable/index.html) and [Monai](https://docs.monai.io/en/latest/transforms.html)]
 # %%
 # Flip horizontally
 img_flip_horizontal = img[:, ::-1]
@@ -931,7 +961,8 @@ Refer to the [examples](https://pytorch.org/vision/0.13/transforms.html) and ide
 <div class="alert alert-info">
 
 ### Task 4.2
-While augmenting images and segmentation masks, should they be augmented similarly or differently? Discuss.
+Q1. While augmenting images and segmentation masks, should they be augmented similarly or differently? Discuss. <br>
+Q2. What are the disadvantages of augmenting images? When can it be harmful?
 """
 
 # %% tags=["task"]
@@ -946,7 +977,8 @@ While augmenting images and segmentation masks, should they be augmented similar
 # ##########################
 # ```
 #
-# The same geometric transform should be applied to both the images and the corresponding segmentation masks.
+# A1.  The same geometric transform should be applied to both the images and the corresponding segmentation masks. <br>
+# A2. Augmenting images can be computationally expensive and can lead to overfitting if not done properly. It can be harmful when the augmentations are not appropriate for the task at hand. For example, flipping a medical image horizontally can lead to incorrect diagnosis.
 
 # %% [markdown]
 """
@@ -985,7 +1017,8 @@ plt.show()
 # Sometimes, you may want to add a colorbar to your image to show the intensity values.
 #
 # **Note**: The <code>vmin</code> and <code>vmax</code> arguments are used to set the range of the colorbar.
-# In this case, the intensity values range from 0 to 255. But you can set the range to any values you want (based on the intensity values in the image).
+# In this case, the intensity values range from 0 to 255. But you can set the range to any values you want (based on the intensity values in the image). <br>
+# **Note**: for plotting colorbar for instance mask (in the future), you can use <code>viridis</code> colormap for the mask for better visualization.
 # %%
 plt.figure(figsize=(6, 6))
 plt.imshow(img[..., 0], cmap="magma", vmin=0, vmax=255)
