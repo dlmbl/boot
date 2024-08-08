@@ -13,7 +13,7 @@
 # - Flipping images (This is important as it helps in creating new images from the original data which is useful for training models in a memory efficient way)
 # - Batching images (As we train in a SGD manner, batching is important as it helps in training the model in a memory efficient way and smoothens the optimization process)
 # - Convolutions (This is important as it is the primary operation in Convolutional Neural Networks)
-# - Data Augmentation (This is important as it helps in artificially increasing the size of the training data which is useful for training models in a memory efficient way)
+# - Data Augmentation (This is important as it helps in artificially increasing the size of the training data which is useful for training models in a data efficient way)
 
 #
 # We will be using sample images from the *MoNuSeg* dataset provided by [Kumar et al, 2018](https://ieeexplore.ieee.org/document/8880654). The data was publicly made available [here](https://monuseg.grand-challenge.org/) by the authors of the publication.
@@ -146,8 +146,6 @@ plt.imshow(mask)
 <div class="alert alert-info">
 
 ### Task 1.2
-Checking the description of the functions.
-There is a way in python to get the description of a function. This is useful when you are not sure what the function does or what arguments it takes.
 
 Try to get the description of the `imread` function that we used above.
 """
@@ -414,7 +412,7 @@ def visualize(im1, im2):
 # Executing the cell below, would visualize a new random image and the corresponding segmentation mask, each time. This is because the variable `idx` gets a new value between $0$ and $14$ (there are $15$ images).
 
 # %%
-idx = np.random.randint(len(img_filenames))
+idx = 8 #change this value to visualize a different image and mask to explore the dataset
 visualize(imread(img_filenames[idx]), imread(mask_filenames[idx]))
 
 # %% [markdown]
@@ -510,7 +508,7 @@ idx = np.random.randint(len(img_filenames))
 img = imread(img_filenames[idx])
 
 factor = 4
-downsampled_img = img[::factor, ::factor]
+downsampled_img = img[::factor, ::factor] # here we are selecting every 'factor' pixel in the height and width dimension
 print(f"Original image shape: {img.shape}")
 print(f"Downsampled image shape: {downsampled_img.shape}")
 
@@ -593,6 +591,28 @@ visualize(img, hflipped_img)
 
 # %% [markdown]
 """
+<div class="alert alert-info">
+
+### Bonus Task for Chapter 2
+Can you think of any other reason why we need to crop images, aside from saving memory?
+"""
+# %% tags=["task"]
+##########################
+######## To Do ###########
+##########################
+
+# %% [markdown] tags=["solution"]
+
+# ```
+# ##########################
+# ####### Solution #########
+# ##########################
+# ```
+
+# Answer: Because often the training images come with different sizes and this creates an issue while `batching` the images.
+
+# %% [markdown]
+"""
 <div class="alert alert-success">
 
 <hr>
@@ -645,6 +665,9 @@ These are also ways of basic data augmentation which is useful for training mode
 
 Make a batch of size $B=4$ by sampling 4 images randomly from the available images (this will be a 4D np array).
 <br> Here, you would also have to ensure that the second axis corresponds to the channel (use `np.transpose`)
+
+**Hint**: Use `np.random.choice` to sample 4 random indices from the list of image filenames. 
+`np.random.randint` (which we have used above) to select batches could give duplicate images in a batch. In this case, your batch should contain 4 unique images.
 """
 
 # %% tags=["task"]
@@ -990,7 +1013,7 @@ Hurrah! 😃
 
 ## Checkpoint 4
 
-In the fourth chapter, we learnt about data augmentation which is an important concept in training models. Data augmentation helps in artificially increasing the size of the training data which is useful for training models in a memory efficient way.
+In the fourth chapter, we learnt about data augmentation which is an important concept in training models. Data augmentation helps in artificially increasing the size of the training data which is useful for training models in a data efficient way.
 We implemented some basic data augmentation techniques using numpy.
 
 <hr>
