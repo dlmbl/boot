@@ -17,7 +17,7 @@ We will learn about:
 - Flipping images (This is important as it helps in creating new images from the original data which is useful for training models in a memory efficient way)
 - Batching images (As we train in a SGD manner, batching is important as it helps in training the model in a memory efficient way and smoothens the optimization process)
 - Convolutions (This is important as it is the primary operation in Convolutional Neural Networks)
-- Data Augmentation (This is important as it helps in artificially increasing the size of the training data which is useful for training models in a memory efficient way)
+- Data Augmentation (This is important as it helps in artificially increasing the size of the training data which is useful for training models in a data efficient way)
 
 ### Dataset
 
