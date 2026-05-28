@@ -349,7 +349,7 @@ visualize(img, flipped_vertically)
 ###########################
 def flip_image(im):
     flipped_horizontally = np.flip(im, axis=1)  # Flip horizontally
-    flipped_vertically = np.flip(im, axis=1)  # Flip vertically
+    flipped_vertically = np.flip(im, axis=0)  # Flip vertically
     return flipped_horizontally, flipped_vertically
 
 
