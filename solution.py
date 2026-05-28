@@ -496,7 +496,7 @@ visualize(img, top_left_rescaled)
 # data augmentation. These transformations can be easily applied to images and are optimized for performance.
 # The `transforms` module provides a wide range of transformations that can be applied to images.
 # We can compose multiple transformations together using `transforms.Compose` and randomly apply them to the images on-the-fly during training.
-# Here is an example of how to use `torchvision.transforms` to perform some of transformations as above.
+# Here is an example of how to use `torchvision.transforms` to perform some of the transformations above.
 
 # %% [markdown]
 """<div class="alert alert-info">
