@@ -1134,6 +1134,6 @@ Hurrah! 😃 Post in the chat when you reach this checkpoint!
 
 In this chapter, we learned about:
 
-<li> analyzing the size of cells in the images </li>
+<li> analyzing the size of nuclei in the images </li>
 <li> visualizing the masks on top of the images </li>
 """
