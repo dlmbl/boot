@@ -11,7 +11,7 @@
 # * **Data augmentation**: Implementing common image transformations such as flipping and rotation using both basic Python libraries like `numpy` and deep-learning frameworks like PyTorch's `torchvision`.
 # * **Convolutions**: Understanding and implementing 2D convolutions, the foundational operation of Convolutional Neural Networks (CNNs), and seeing how different filters can extract specific features from an image.
 # * **Efficient data loading**: Creating batches of data and building an efficient data loading pipeline using PyTorch's `Dataset` and `DataLoader` classes.
-# * **Advanced image analysis**: Using libraries like `scikit-image` and `matplotlib` to perform analyses, such as visualizing cell size distributions and overlaying segmentation masks on original images.
+# * **Advanced image analysis**: Using libraries like `scikit-image` and `matplotlib` to perform analyses, such as visualizing nucleus size distributions and overlaying segmentation masks on original images.
 #
 # We will be using sample images from the *MoNuSeg* dataset provided by [Kumar et al, 2018](https://ieeexplore.ieee.org/document/8880654). The data was publicly made available [here](https://monuseg.grand-challenge.org/) by the authors of the publication. This dataset shows Hematoxylin and Eosin (H&E) Stained Images showing nuclei in different shapes.
 
