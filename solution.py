@@ -556,7 +556,7 @@ visualize(img, transformed_img)
 # Normalization is a technique used to scale the pixel values of an image to a specific range, typically [0, 1] or [-1, 1].
 # This helps in stabilizing the training process and improving the convergence of the model.
 #
-# One way of normalizing an image is to divide the intensity on each pixel by the maximum allowed intensity for the available data type.
+# One way of normalizing an image is to divide the intensity of each pixel by the maximum allowed intensity for the available data type.
 
 # %% [markdown]
 """<div class="alert alert-info">
