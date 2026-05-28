@@ -256,7 +256,7 @@ plt.tight_layout()
 # But the image which we are working with has the `channel` as the last axis.
 # Therefore, we need to reshape (by swapping) the image to the correct shape.
 
-# To make it more clear and don't swipe height and width by mistake, we will first 
+# To make it clearer and so that we don't swap height and width by mistake, we will first 
 # crop a rectangular patch so we have different height and width and then we will 
 # swap the axes to have the channel as the first axis.
 
