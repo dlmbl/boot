@@ -1090,7 +1090,7 @@ analyze_area(mask)
 
 Let's overlay the masks' boundaries on the images to visualize the results.
 
-Hint: `skimage.segmentation.find_boundaries` can be useful here.
+Hint: `skimage.segmentation.mark_boundaries` can be useful here.
 """
 # %% tags=["task"]
 ##########################
