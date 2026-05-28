@@ -504,7 +504,8 @@ visualize(img, top_left_rescaled)
 ### Task 2.5
 Let's compose a series of transformations using `transforms.Compose()` that includes:
 - Converting the numpy array to a PIL image using `transforms.ToPILImage()` (required for many torchvision transforms)
-- Randomly flip the image horizontally and vertically with a probability of 0.5
+- Randomly flip the image horizontally with a probability of 0.5  
+- Randomly flip the image vertically with a probability of 0.5  
 - Randomly rotate the image by 90 degrees
 - Randomly crop the image to a size of 500x500
 - Resize the image to a size of 1000x1000
