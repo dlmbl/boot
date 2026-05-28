@@ -187,7 +187,7 @@ print(mask.shape)
 <div class="alert alert-info">
 
 ### Task 1.3
-What is the data type of <code>img</code> and the <code>mask</code> ? What are the minimum and maximum intensity values?
+What is the data type of <code>img</code> and the <code>mask</code> ? What are the minimum and maximum intensity values of <code>img</code> and <code>mask</code>?
 
 *Hint*: <a href="https://assets.datacamp.com/blog_assets/Numpy_Python_Cheat_Sheet.pdf">np cheatsheet</a></div>
 """
