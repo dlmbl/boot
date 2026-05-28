@@ -639,7 +639,7 @@ def conv2d(img, kernel):
 
     for i in range(output.shape[0]):
         for j in range(output.shape[1]):
-            # Extract the curent patch or window from the image
+            # Extract the current patch or window from the image
             patch = ... # TODO
 
             # Element-wise multiplication between the patch and the kernel, then sum the result to get the convolved value at (i, j)
