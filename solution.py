@@ -507,7 +507,7 @@ Let's compose a series of transformations using `transforms.Compose()` that incl
 - Randomly flip the image horizontally with a probability of 0.5  
 - Randomly flip the image vertically with a probability of 0.5  
 - Randomly rotate the image by 90 degrees
-- Randomly crop the image to a size of 500x500
+- Crop the image to 500x500 at a random location  
 - Resize the image to a size of 1000x1000
 
 """
