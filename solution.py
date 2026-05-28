@@ -510,6 +510,7 @@ Let's compose a series of transformations using `transforms.Compose()` that incl
 - Crop the image to 500x500 at a random location  
 - Resize the image to a size of 1000x1000
 
+Hint: see the possible transoformations in [https://docs.pytorch.org/vision/0.9/transforms.html](pytorch docs)
 """
 
 
