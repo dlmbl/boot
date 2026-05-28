@@ -615,6 +615,7 @@ In the second chapter, we learnt about:
 ### Task 3.1
 Implement a function that performs a convolution of an image with a filter. 
 <br> Assume that your image is square and that your filter is square and has an odd width and height.
+<br> For simplicity, assume your image has only one channel.
 <br> Also assume that stride is 1.
 """
 
