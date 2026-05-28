@@ -626,7 +626,7 @@ Implement a function that performs a convolution of an image with a filter.
 
 
 def conv2d(img, kernel):
-    # Ensure the kernel is square and has an odd size
+    # Ensure the kernel is square and has an odd-numbered dimensions (e.g. 3x3, 5x5)
     assert kernel.shape[0] == kernel.shape[1]
     assert kernel.shape[0] % 2 != 0
 
