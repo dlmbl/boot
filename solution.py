@@ -655,7 +655,7 @@ def conv2d(img, kernel):
 
 
 def conv2d(img, kernel):
-    # Ensure the kernel is square and has an odd size
+    # Ensure the kernel is square and has an odd-numbered dimensions (e.g. 3x3, 5x5)
     assert kernel.shape[0] == kernel.shape[1]
     assert kernel.shape[0] % 2 != 0
 
@@ -668,7 +668,7 @@ def conv2d(img, kernel):
 
     for i in range(output.shape[0]):
         for j in range(output.shape[1]):
-            # Extract the curent patch or window from the image
+            # Extract the current patch or window from the image
             patch = img[i : i + d_k, j : j + d_k]
 
             # Element-wise multiplication between the patch and the kernel, then sum the result to get the convolved value at (i, j)
@@ -718,9 +718,9 @@ can you come up with an analytical relationship regarding how much smaller the o
 
 Feel free to play with this [visualizer](https://ezyang.github.io/convolution-visualizer/index.html) to get an intuition (ignore "Padding" and "Dilation" for now)!
 
-**Hint**: Look at your output from Task 3.1. Your image transformed from a shape of 256 to 254. Using teh Kernel Size ($K$) and Stride ($S$), can you figure out the mathematical relationship that produced this specific change?
+**Hint**: Look at your output from Task 3.1. Your image transformed from a shape of 256 to 254. Using the Kernel Size ($K$) and Stride ($S$), can you figure out the mathematical relationship that produced this specific change?
 """
-# %% tags=["task"]
+# %% [markdown] tags=["task"]
 ##########################
 ######## To Do ###########
 ##########################
@@ -839,7 +839,7 @@ Good job! 🤟 Flag the sticky note when you reach this checkpoint!
 
 In the third chapter, we learnt about:
 
-<li> Convolutions and its implementation </li>
+<li> Convolution and its implementation </li>
 <li> Different types of kernels </li>
 
 """
@@ -851,7 +851,7 @@ In the third chapter, we learnt about:
 
 # %% [markdown]
 # In this chapter, we will learn how to create batches of images and masks.
-# Batching is a technique used to group multiple samples together to speed up the training process and make better use of the GPU memory.
+# Batching is a technique used to group multiple samples to speed up the training process and make better use of GPU memory.
 
 # %% [markdown]
 # We will use the `glob` module to load all the images and masks from the `monuseg-2018/download/images` and `monuseg-2018/download/masks` directories.
@@ -894,7 +894,7 @@ print(f"Loaded {len(images)} images and {len(masks)} masks.")
 """<div class="alert alert-info">
 
 ### Task 4.2
-We want to create a batch, a small group of images randomly chosen from the whole dataset. We need to pick the same images and masks to create the batch.
+We want to create a batch, a small group of images randomly chosen from the whole dataset. We need to pick images with matching masks to create the batch.
 You have to choose a set of random numbers that represent the position of the images in our list and then use those numbers to reach the images/masks and create the batch.
 """
 # %% tags=["task"]
@@ -1037,7 +1037,7 @@ In the fourth chapter, we learnt about:
 
 # %% [markdown]
 # This chapter focuses on a more advanced analysis of the image data and masks.
-# We will begin by analyzing cell sizes to visualize their distribution and then create an overlay of the masks on the original images.
+# We will begin by extracting nucleus sizes to visualize their distribution and then create an overlay of the masks with the original images.
 # These analyses are crucial for gaining a better understanding of the dataset and closely examining the quality of our segmentation results.
 
 # %% [markdown]
