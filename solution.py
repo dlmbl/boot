@@ -388,7 +388,7 @@ visualize(img, flipped_vertically)
 ####### Solution #########
 ###########################
 def flip_image(im):
-    flipped_horizontally = im[::-1, :, :]  # Flip horizontally
+    flipped_horizontally = im[:, ::-1, :]  # Flip horizontally
     flipped_vertically = im[:, ::-1, :]  # Flip vertically
     return flipped_horizontally, flipped_vertically
 
