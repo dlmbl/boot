@@ -1058,7 +1058,7 @@ def analyze_area(mask):
     plt.hist(areas, bins=50)
     plt.xlabel("Size")
     plt.ylabel("Frequency")
-    plt.title("Histogram of Cell Sizes")
+    plt.title("Histogram of Nucleus Sizes")
     plt.show()
 
 
