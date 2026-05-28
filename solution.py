@@ -1041,7 +1041,7 @@ In the fourth chapter, we learnt about:
 """<div class="alert alert-info">
 
 ### Task 5.1 (Bonus)
-Let's find the sizes of the cells in the image and visualize the distribution.
+Let's find the sizes of the nuclei in the image and visualize the distribution.
 
 Hint: `skimage.measure.regionprops` can be useful here.
 """
