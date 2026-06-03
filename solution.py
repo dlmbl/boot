@@ -11,7 +11,7 @@
 # * **Data augmentation**: Implementing common image transformations such as flipping and rotation using both basic Python libraries like `numpy` and deep-learning frameworks like PyTorch's `torchvision`.
 # * **Convolutions**: Understanding and implementing 2D convolutions, the foundational operation of Convolutional Neural Networks (CNNs), and seeing how different filters can extract specific features from an image.
 # * **Efficient data loading**: Creating batches of data and building an efficient data loading pipeline using PyTorch's `Dataset` and `DataLoader` classes.
-# * **Advanced image analysis**: Using libraries like `scikit-image` and `matplotlib` to perform analyses, such as visualizing cell size distributions and overlaying segmentation masks on original images.
+# * **Advanced image analysis**: Using libraries like `scikit-image` and `matplotlib` to perform analyses, such as visualizing nucleus size distributions and overlaying segmentation masks on original images.
 #
 # We will be using sample images from the *MoNuSeg* dataset provided by [Kumar et al, 2018](https://ieeexplore.ieee.org/document/8880654). The data was publicly made available [here](https://monuseg.grand-challenge.org/) by the authors of the publication. This dataset shows Hematoxylin and Eosin (H&E) Stained Images showing nuclei in different shapes.
 
@@ -54,7 +54,7 @@ extract_data(
 ### Task 0.1
 Use the Explorer (left panel) and manually check the directory structure of the downloaded data. Where are the images and masks stored?  Can you programmatically count the number of images and masks?
 
-*Hint*: you can run any bash command in a jupyter notebook by prefixing it with `!`. You might find the command `wc` and the pipe operator `|` useful here.
+*Hint*: you can run any bash command in a jupyter notebook by prefixing it with `!`. You might find the command `wc` (which stands for "word count") and the pipe operator `|` useful here.
 """
 
 
@@ -187,7 +187,7 @@ print(mask.shape)
 <div class="alert alert-info">
 
 ### Task 1.3
-What is the data type of <code>img</code> and the <code>mask</code> ? What are the minimum and maximum intensity values?
+What is the data type of <code>img</code> and the <code>mask</code> ? What are the minimum and maximum intensity values of <code>img</code> and <code>mask</code>?
 
 *Hint*: <a href="https://assets.datacamp.com/blog_assets/Numpy_Python_Cheat_Sheet.pdf">np cheatsheet</a></div>
 """
@@ -256,16 +256,25 @@ plt.tight_layout()
 # But the image which we are working with has the `channel` as the last axis.
 # Therefore, we need to reshape (by swapping) the image to the correct shape.
 
+# To make it clearer and so that we don't swap height and width by mistake, we will first 
+# crop a rectangular patch so we have different height and width and then we will 
+# swap the axes to have the channel as the first axis.
+
 # %% [markdown]
 """<div class="alert alert-info">
 
 ### Task 1.5
-Transpose the image to have the channel as the first axis. Use `np.transpose` to achieve this.
+Crop a rectangle (e.g., 500x800) from the image and then transpose the image to have the channel as the first axis. Use `np.transpose` to achieve this.
 """
 # %% tags=["task"]
 ##########################
 ######## To Do ###########
 ##########################
+# Create a rectangular crop of the image of size 500x800
+cropped_img = # TODO
+print("Original image shape: ", cropped_img.shape)
+
+# Transpose the image to have the channel as the first axis
 reshaped_img = ...  # TODO
 print("Reshaped image shape: ", reshaped_img.shape)
 
@@ -273,7 +282,12 @@ print("Reshaped image shape: ", reshaped_img.shape)
 ##########################
 ####### Solution #########
 ##########################
-reshaped_img = np.transpose(img, (2, 0, 1))
+# Create a rectangular crop of the image of size 500x800
+cropped_img = img[:500, :800, :]
+print("Original image shape: ", cropped_img.shape)
+
+# Transpose the image to have the channel as the first axis
+reshaped_img = np.transpose(cropped_img, (2, 0, 1))
 print("Reshaped image shape: ", reshaped_img.shape)
 
 # %% [markdown]
@@ -334,8 +348,8 @@ visualize(img, flipped_vertically)
 ####### Solution #########
 ###########################
 def flip_image(im):
-    flipped_horizontally = np.flip(im, axis=0)  # Flip horizontally
-    flipped_vertically = np.flip(im, axis=1)  # Flip vertically
+    flipped_horizontally = np.flip(im, axis=1)  # Flip horizontally
+    flipped_vertically = np.flip(im, axis=0)  # Flip vertically
     return flipped_horizontally, flipped_vertically
 
 
@@ -374,8 +388,8 @@ visualize(img, flipped_vertically)
 ####### Solution #########
 ###########################
 def flip_image(im):
-    flipped_horizontally = im[::-1, :, :]  # Flip horizontally
-    flipped_vertically = im[:, ::-1, :]  # Flip vertically
+    flipped_horizontally = im[:, ::-1, :]  # Flip horizontally
+    flipped_vertically = im[::-1, :, :]  # Flip vertically
     return flipped_horizontally, flipped_vertically
 
 
@@ -482,20 +496,21 @@ visualize(img, top_left_rescaled)
 # data augmentation. These transformations can be easily applied to images and are optimized for performance.
 # The `transforms` module provides a wide range of transformations that can be applied to images.
 # We can compose multiple transformations together using `transforms.Compose` and randomly apply them to the images on-the-fly during training.
-# Here is an example of how to use `torchvision.transforms` to perform some of transformations as above.
+# Here is an example of how to use `torchvision.transforms` to perform some of the transformations above.
 
 # %% [markdown]
 """<div class="alert alert-info">
 
 ### Task 2.5
 Let's compose a series of transformations using `transforms.Compose()` that includes:
-- Randomly flip the image horizontally with a probability of 0.5
-- Randomly flip the image vertically with a probability of 0.5
+- Converting the numpy array to a PIL image using `transforms.ToPILImage()` (required for many torchvision transforms)
+- Randomly flip the image horizontally with a probability of 0.5  
+- Randomly flip the image vertically with a probability of 0.5  
 - Randomly rotate the image by 90 degrees
-- Randomly crop the image to a size of 500x500
+- Crop the image to 500x500 at a random location  
 - Resize the image to a size of 1000x1000
 
-Hint: first, convert the numpy array to a PIL image using `transforms.ToPILImage()`.
+Hint: see the possible transoformations in [https://docs.pytorch.org/vision/0.9/transforms.html](pytorch docs)
 """
 
 
@@ -506,7 +521,9 @@ Hint: first, convert the numpy array to a PIL image using `transforms.ToPILImage
 import torchvision.transforms as transforms
 
 # Define a series of transformations
-transform = ...  # TODO
+transform = transforms.Compose(
+    ...  # TODO
+)
 
 transformed_img = transform(img)
 visualize(img, transformed_img)
@@ -540,12 +557,12 @@ visualize(img, transformed_img)
 # Normalization is a technique used to scale the pixel values of an image to a specific range, typically [0, 1] or [-1, 1].
 # This helps in stabilizing the training process and improving the convergence of the model.
 #
-# One way of normalizing an image is to divide the intensity on each pixel by the maximum allowed intensity for the available data type.
+# One way of normalizing an image is to divide the intensity of each pixel by the maximum allowed intensity for the available data type.
 
 # %% [markdown]
 """<div class="alert alert-info">
 
-### Task 2.5
+### Task 2.6
 Normalize the image by dividing each pixel value by the maximum allowed intensity for the data type. Does the data type of the image change? What are the minimum and maximum values of the normalized image?
 """
 # %% tags=["task"]
@@ -587,10 +604,10 @@ In the second chapter, we learnt about:
 # %% [markdown]
 # Convolutions are the elementary operations used in Convolutional Neural Networks (CNNs). <br> The images are convolved with filters as below: <br>
 #
-# ![](https://upload.wikimedia.org/wikipedia/commons/1/19/2D_Convolution_Animation.gif)
+# ![](https://raw.githubusercontent.com/vdumoulin/conv_arithmetic/master/gif/no_padding_no_strides.gif)
 #
 #
-# Please read this section https://en.wikipedia.org/wiki/Kernel_(image_processing)#Convolution on convolutions to learn how to implement a your own convolution function!
+# Please read this section https://en.wikipedia.org/wiki/Kernel_(image_processing)#Convolution on convolutions to learn how to implement your own convolution function!
 
 # %% [markdown]
 """
@@ -599,6 +616,7 @@ In the second chapter, we learnt about:
 ### Task 3.1
 Implement a function that performs a convolution of an image with a filter. 
 <br> Assume that your image is square and that your filter is square and has an odd width and height.
+<br> For simplicity, assume your image has only one channel.
 <br> Also assume that stride is 1.
 """
 
@@ -609,6 +627,7 @@ Implement a function that performs a convolution of an image with a filter.
 
 
 def conv2d(img, kernel):
+    # Ensure the kernel is square and has an odd-numbered dimensions (e.g. 3x3, 5x5)
     assert kernel.shape[0] == kernel.shape[1]
     assert kernel.shape[0] % 2 != 0
 
@@ -621,8 +640,11 @@ def conv2d(img, kernel):
 
     for i in range(output.shape[0]):
         for j in range(output.shape[1]):
-            output[i, j] = ...  # TODO
+            # Extract the current patch or window from the image
+            patch = ... # TODO
 
+            # Element-wise multiplication between the patch and the kernel, then sum the result to get the convolved value at (i, j)
+            output[i, j] = ...  # TODO
     return output
 
 
@@ -633,6 +655,7 @@ def conv2d(img, kernel):
 
 
 def conv2d(img, kernel):
+    # Ensure the kernel is square and has an odd-numbered dimensions (e.g. 3x3, 5x5)
     assert kernel.shape[0] == kernel.shape[1]
     assert kernel.shape[0] % 2 != 0
 
@@ -645,24 +668,33 @@ def conv2d(img, kernel):
 
     for i in range(output.shape[0]):
         for j in range(output.shape[1]):
-            output[i, j] = np.sum(img[i : i + d_k, j : j + d_k] * kernel)
+            # Extract the current patch or window from the image
+            patch = img[i : i + d_k, j : j + d_k]
+
+            # Element-wise multiplication between the patch and the kernel, then sum the result to get the convolved value at (i, j)
+            output[i, j] = np.sum(patch * kernel)
     return output
 
 
 # %%
 # Run this cell to check your function
 
-identity = np.array([[0, 0, 0], [0, 1, 0], [0, 0, 0]])
+# Identity Kernel
+identity = np.array([[0, 0, 0], 
+                     [0, 1, 0], 
+                     [0, 0, 0]])
 # Let's take a 256x256 center crop of the image for better visualization of the effect of the convolution
-new_im = conv2d(img[128:384, 128:384, 0], identity)
-# Lets print the original image and the convolved image
-print(img[128:384, 128:384, 0].shape)
-print(new_im.shape)
+test_crop = img[128:384, 128:384, 0]  # Take the first channel for simplicity
+new_im = conv2d(test_crop, identity)
+
+# An identity kernel should produce an output that is a copy of the intput image (minus the edges during convolution)
+print(f"Input shape: {test_crop.shape} -> Output shape: {new_im.shape}")
+
 
 # Lets visualize the original image and the convolved image and the filter
 plt.figure(figsize=(10, 10))
 plt.subplot(131)
-plt.imshow(img[128:384, 128:384, 0])
+plt.imshow(test_crop)
 plt.title("Original Image")
 plt.subplot(132)
 plt.imshow(identity)
@@ -685,8 +717,10 @@ Given an input image of size $H \times W$, a filter of size $K_h \times K_w$ , a
 can you come up with an analytical relationship regarding how much smaller the output image is compared to the input image?
 
 Feel free to play with this [visualizer](https://ezyang.github.io/convolution-visualizer/index.html) to get an intuition (ignore "Padding" and "Dilation" for now)!
+
+**Hint**: Look at your output from Task 3.1. Your image transformed from a shape of 256 to 254. Using the Kernel Size ($K$) and Stride ($S$), can you figure out the mathematical relationship that produced this specific change?
 """
-# %% tags=["task"]
+# %% [markdown] tags=["task"]
 ##########################
 ######## To Do ###########
 ##########################
@@ -805,7 +839,7 @@ Good job! 🤟 Flag the sticky note when you reach this checkpoint!
 
 In the third chapter, we learnt about:
 
-<li> Convolutions and its implementation </li>
+<li> Convolution and its implementation </li>
 <li> Different types of kernels </li>
 
 """
@@ -817,7 +851,7 @@ In the third chapter, we learnt about:
 
 # %% [markdown]
 # In this chapter, we will learn how to create batches of images and masks.
-# Batching is a technique used to group multiple samples together to speed up the training process and make better use of the GPU memory.
+# Batching is a technique used to group multiple samples to speed up the training process and make better use of GPU memory.
 
 # %% [markdown]
 # We will use the `glob` module to load all the images and masks from the `monuseg-2018/download/images` and `monuseg-2018/download/masks` directories.
@@ -860,7 +894,8 @@ print(f"Loaded {len(images)} images and {len(masks)} masks.")
 """<div class="alert alert-info">
 
 ### Task 4.2
-Sample 5 images and masks from the loaded data and create a mini-batch of images and masks.
+We want to create a batch, a small group of images randomly chosen from the whole dataset. We need to pick images with matching masks to create the batch.
+You have to choose a set of random numbers that represent the position of the images in our list and then use those numbers to reach the images/masks and create the batch.
 """
 # %% tags=["task"]
 ##########################
@@ -909,7 +944,6 @@ Create a custom dataset using PyTorch's `Dataset` class that loads the images an
 ##########################
 from torch.utils.data import Dataset
 
-
 class MyDataset(Dataset):
     def __init__(self, images, masks):
         self.images = images
@@ -929,7 +963,6 @@ print(my_dataset[0])
 ####### Solution #########
 ##########################
 from torch.utils.data import Dataset
-
 
 class MyDataset(Dataset):
     def __init__(self, images, masks):
@@ -1004,14 +1037,14 @@ In the fourth chapter, we learnt about:
 
 # %% [markdown]
 # This chapter focuses on a more advanced analysis of the image data and masks.
-# We will begin by analyzing cell sizes to visualize their distribution and then create an overlay of the masks on the original images.
+# We will begin by extracting nucleus sizes to visualize their distribution and then create an overlay of the masks with the original images.
 # These analyses are crucial for gaining a better understanding of the dataset and closely examining the quality of our segmentation results.
 
 # %% [markdown]
 """<div class="alert alert-info">
 
 ### Task 5.1 (Bonus)
-Let's find the sizes of the cells in the image and visualize the distribution.
+Let's find the sizes of the nuclei in the image and visualize the distribution.
 
 Hint: `skimage.measure.regionprops` can be useful here.
 """
@@ -1022,13 +1055,13 @@ Hint: `skimage.measure.regionprops` can be useful here.
 ##########################
 from skimage import measure
 
-
 def analyze_area(mask):
+    regions = ... # TODO
     areas = ...  # TODO
     plt.hist(areas, bins=50)
     plt.xlabel("Size")
     plt.ylabel("Frequency")
-    plt.title("Histogram of Cell Sizes")
+    plt.title("Histogram of Nucleus Sizes")
     plt.show()
 
 
@@ -1040,14 +1073,13 @@ analyze_area(mask)
 ##########################
 from skimage import measure
 
-
 def analyze_area(mask):
     regions = measure.regionprops(mask)
     areas = [region.area for region in regions]
     plt.hist(areas, bins=50)
     plt.xlabel("Size")
     plt.ylabel("Frequency")
-    plt.title("Histogram of Cell Sizes")
+    plt.title("Histogram of Nucleus Sizes")
     plt.show()
 
 
@@ -1061,7 +1093,7 @@ analyze_area(mask)
 
 Let's overlay the masks' boundaries on the images to visualize the results.
 
-Hint: `skimage.segmentation.find_boundaries` can be useful here.
+Hint: `skimage.segmentation.mark_boundaries` can be useful here.
 """
 # %% tags=["task"]
 ##########################
@@ -1105,6 +1137,6 @@ Hurrah! 😃 Post in the chat when you reach this checkpoint!
 
 In this chapter, we learned about:
 
-<li> analyzing the size of cells in the images </li>
+<li> analyzing the size of nuclei in the images </li>
 <li> visualizing the masks on top of the images </li>
 """
